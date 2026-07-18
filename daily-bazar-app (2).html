@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ডেইলি বাজার.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F2E4;
+    --paper:#FFFDF8;
+    --ink:#2B2620;
+    --ink-soft:#5C5548;
+    --green:#1F4D3A;
+    --green-soft:#E4EEE7;
+    --mustard:#E8A33D;
+    --maroon:#8B2635;
+    --up:#B9433F;
+    --down:#2C7A4B;
+    --line:#DCD3BC;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Hind Siliguri',sans-serif; -webkit-font-smoothing:antialiased;}
+  .display{font-family:'Baloo Da 2',sans-serif;}
+
+  header{background:var(--green); color:#fff; padding:14px 16px; position:sticky; top:0; z-index:20; box-shadow:0 4px 14px rgba(31,77,58,.18);}
+  .header-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .wordmark{display:flex; align-items:baseline; gap:6px;}
+  .wordmark .main{font-family:'Baloo Da 2',sans-serif; font-weight:800; font-size:20px; letter-spacing:.2px;}
+  .wordmark .dot{color:var(--mustard); font-size:20px;}
+  .tagline{font-size:12px; color:#CFE3D7; margin-top:2px;}
+  .header-btn{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35); color:#fff; border-radius:999px; padding:6px 12px; font-size:12.5px; font-weight:600; cursor:pointer; white-space:nowrap;}
+
+  .loc-pill{background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.35); border-radius:999px; padding:7px 12px; font-size:13px; display:flex; align-items:center; gap:6px; cursor:pointer; white-space:nowrap;}
+  .loc-pill:active{background:rgba(255,255,255,.22);}
+  .loc-pill b{font-weight:700;}
+
+  .updated-strip{margin-top:12px; font-size:12px; color:#CFE3D7; display:flex; align-items:center; gap:6px;}
+  .updated-strip .tick{width:6px;height:6px;border-radius:50%;background:var(--mustard);display:inline-block;}
+  .live-badge{background:rgba(232,163,61,.18); color:var(--mustard); padding:2px 8px; border-radius:999px; font-weight:700; font-size:10.5px; margin-left:4px;}
+
+  .chip-row{display:flex; gap:8px; overflow-x:auto; padding:14px 16px 4px; scrollbar-width:none;}
+  .chip-row::-webkit-scrollbar{display:none;}
+  .chip{flex:0 0 auto; padding:8px 14px; border-radius:999px; background:var(--paper); border:1px solid var(--line); font-size:13.5px; font-weight:600; color:var(--ink-soft); cursor:pointer;}
+  .chip.active{background:var(--green); border-color:var(--green); color:#fff;}
+
+  main{max-width:520px; margin:0 auto; padding:6px 16px 96px;}
+  .board-title{font-family:'Baloo Da 2',sans-serif; font-size:16px; font-weight:700; margin:18px 2px 8px; color:var(--green); display:flex; align-items:center; gap:8px;}
+  .board-title::after{content:""; flex:1; height:2px; background:repeating-linear-gradient(90deg,var(--line) 0 6px, transparent 6px 12px);}
+
+  .price-card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; margin-bottom:10px;}
+  .price-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .item-name{font-weight:600; font-size:15px;}
+  .item-unit{font-size:12px; color:var(--ink-soft); margin-top:1px;}
+  .price-block{text-align:right;}
+  .retail-price{font-size:17px; font-weight:700; font-family:'Baloo Da 2',sans-serif;}
+  .wholesale-price{font-size:11.5px; color:var(--ink-soft); margin-top:1px;}
+  .trend{display:inline-flex; align-items:center; gap:3px; font-size:11.5px; font-weight:700; padding:2px 7px; border-radius:999px; margin-top:4px;}
+  .trend.up{color:var(--up); background:#F8E7E6;}
+  .trend.down{color:var(--down); background:#E4F1E9;}
+  .trend.same{color:var(--ink-soft); background:#EFEAD9;}
+  .market-tag{font-size:11px; color:var(--ink-soft); margin-top:8px; border-top:1px dashed var(--line); padding-top:7px;}
+
+  .admin-link{text-align:center; margin-top:22px;}
+  .admin-link span{font-size:11.5px; color:var(--ink-soft); cursor:pointer; border-bottom:1px dashed var(--line); padding-bottom:1px;}
+
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:14px; margin-bottom:12px;}
+  .center-card{text-align:center; padding:26px 18px;}
+  .h1{font-family:'Baloo Da 2',sans-serif; font-size:19px; color:var(--green); font-weight:700; margin:0 0 6px;}
+  .sub{font-size:13px; color:var(--ink-soft); margin-bottom:16px;}
+
+  .role-choice{display:flex; gap:10px; margin-top:14px;}
+  .role-btn{flex:1; padding:18px 10px; border-radius:12px; border:2px solid var(--line); background:var(--paper); cursor:pointer; text-align:center; font-weight:700; font-size:14.5px; color:var(--ink);}
+  .role-btn .emoji{font-size:26px; display:block; margin-bottom:6px;}
+  .role-btn:active{border-color:var(--green); background:var(--green-soft);}
+
+  .field{margin-bottom:12px;}
+  .field label{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:5px; font-weight:600;}
+  select, input, textarea{width:100%; padding:11px 12px; border-radius:10px; border:1px solid var(--line); background:var(--paper); font-family:'Hind Siliguri',sans-serif; font-size:14.5px; color:var(--ink);}
+  textarea{resize:vertical; min-height:70px;}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+
+  .btn{width:100%; padding:13px; border-radius:10px; border:none; font-family:'Hind Siliguri',sans-serif; font-weight:700; font-size:15px; cursor:pointer; margin-top:6px;}
+  .btn-primary{background:var(--green); color:#fff;}
+  .btn-primary:active{background:#173a2b;}
+  .btn-primary:disabled{opacity:.6;}
+  .btn-ghost{background:none; color:var(--ink-soft); font-weight:600; width:auto; padding:6px 0;}
+  .btn-outline{background:none; border:1px solid var(--green); color:var(--green);}
+
+  .tabs{display:flex; gap:8px; margin-bottom:16px;}
+  .tab{flex:1; text-align:center; padding:9px; border-radius:999px; background:var(--paper); border:1px solid var(--line); font-weight:700; font-size:13.5px; color:var(--ink-soft); cursor:pointer;}
+  .tab.active{background:var(--green); border-color:var(--green); color:#fff;}
+
+  .segrow{display:flex; gap:8px; margin-bottom:14px;}
+  .segbtn{flex:1; text-align:center; padding:9px 6px; border-radius:10px; background:var(--paper); border:1px solid var(--line); font-weight:700; font-size:13px; color:var(--ink-soft); cursor:pointer;}
+  .segbtn.active{background:var(--green); border-color:var(--green); color:#fff;}
+
+  .msg{font-size:12.5px; padding:9px 11px; border-radius:9px; margin-bottom:10px;}
+  .msg.err{background:#F8E7E6; color:var(--maroon);}
+  .msg.ok{background:var(--green-soft); color:var(--green);}
+
+  .shop-card{display:flex; gap:12px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:10px; margin-bottom:10px; cursor:pointer;}
+  .shop-photo{width:64px; height:64px; border-radius:10px; object-fit:cover; background:var(--green-soft); flex:0 0 auto;}
+  .shop-info .name{font-weight:700; font-size:15px;}
+  .shop-info .addr{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+
+  .shop-header{display:flex; gap:12px; align-items:center; margin-bottom:14px;}
+  .shop-header img{width:70px; height:70px; border-radius:12px; object-fit:cover; background:var(--green-soft);}
+
+  .product-card{display:flex; gap:10px; align-items:center; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:10px; margin-bottom:10px;}
+  .product-photo{width:56px; height:56px; border-radius:9px; object-fit:cover; background:var(--green-soft); flex:0 0 auto;}
+  .product-info{flex:1;}
+  .product-info .name{font-weight:600; font-size:14.5px;}
+  .product-info .price{font-family:'Baloo Da 2',sans-serif; color:var(--green); font-weight:700; font-size:15px;}
+  .order-btn{background:var(--mustard); color:#fff; border:none; border-radius:8px; padding:8px 12px; font-weight:700; font-size:12.5px; cursor:pointer; white-space:nowrap;}
+  .seller-row-actions{display:flex; gap:8px;}
+  .seller-row-actions span{font-size:12px; font-weight:700; cursor:pointer;}
+  .edit-a{color:var(--green);}
+  .del-a{color:var(--up);}
+
+  .chat-row{display:flex; gap:10px; align-items:center; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:12px; margin-bottom:10px; cursor:pointer;}
+  .chat-avatar{width:44px; height:44px; border-radius:50%; object-fit:cover; background:var(--green-soft); flex:0 0 auto;}
+  .chat-name{font-weight:700; font-size:14.5px;}
+  .chat-last{font-size:12.5px; color:var(--ink-soft); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:230px;}
+
+  .chat-view{display:flex; flex-direction:column; height:calc(100vh - 250px); min-height:300px;}
+  .chat-messages{flex:1; overflow-y:auto; padding:6px 2px; display:flex; flex-direction:column; gap:8px;}
+  .bubble{max-width:78%; padding:9px 12px; border-radius:14px; font-size:14px; line-height:1.4;}
+  .bubble.mine{align-self:flex-end; background:var(--green); color:#fff; border-bottom-right-radius:4px;}
+  .bubble.theirs{align-self:flex-start; background:var(--paper); border:1px solid var(--line); border-bottom-left-radius:4px;}
+  .chat-input-row{display:flex; gap:8px; padding-top:10px;}
+  .chat-input-row input{flex:1;}
+  .chat-send{background:var(--green); color:#fff; border:none; border-radius:10px; padding:0 16px; font-weight:700; cursor:pointer;}
+
+  .photo-upload{display:flex; align-items:center; gap:12px; margin-bottom:12px;}
+  .photo-preview{width:64px; height:64px; border-radius:10px; object-fit:cover; background:var(--green-soft); border:1px solid var(--line);}
+  .photo-upload label.file-label{background:var(--green-soft); color:var(--green); padding:8px 12px; border-radius:8px; font-size:12.5px; font-weight:700; cursor:pointer;}
+  .photo-upload input[type=file]{display:none;}
+
+  .empty-state{text-align:center; padding:50px 20px; color:var(--ink-soft);}
+  .empty-state .display{color:var(--green); font-size:17px; margin-bottom:6px;}
+  .empty-state .btn{margin-top:16px;}
+
+  .backline{display:flex; align-items:center; gap:8px; margin-bottom:12px; color:var(--green); font-weight:700; font-size:14px; cursor:pointer;}
+
+  .district-list, .thana-list{display:flex; flex-direction:column; gap:8px; margin-top:4px;}
+  .opt-row{display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border-radius:10px; border:1px solid var(--line); background:var(--paper); font-size:14.5px; cursor:pointer;}
+  .opt-row.selected{border-color:var(--green); background:var(--green-soft); font-weight:700; color:var(--green);}
+  .opt-row.disabled{opacity:.45; cursor:not-allowed;}
+  .soon-tag{font-size:10.5px; background:var(--line); padding:2px 7px; border-radius:999px;}
+
+  .admin-list{margin-top:16px;}
+  .admin-row{display:flex; justify-content:space-between; align-items:center; padding:10px 4px; border-bottom:1px solid var(--line); font-size:13.5px;}
+  .admin-row .del{color:var(--up); font-size:12px; cursor:pointer; font-weight:700;}
+
+  .note{font-size:12px; color:var(--ink-soft); background:var(--green-soft); border-radius:10px; padding:10px 12px; margin-top:14px; line-height:1.5;}
+  .note.warn{background:#F8E7E6; color:var(--maroon);}
+
+  .profile-row{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
+  .profile-avatar{width:52px; height:52px; border-radius:50%; background:var(--green-soft); display:flex; align-items:center; justify-content:center; font-size:22px;}
+  .role-badge{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; background:var(--green-soft); color:var(--green); margin-top:4px;}
+
+  /* ---------- bottom tab bar (global nav) ---------- */
+  .tabbar{position:fixed; bottom:0; left:0; right:0; background:var(--paper); border-top:1px solid var(--line); display:flex; z-index:20; max-width:520px; margin:0 auto;}
+  .tabbtn{flex:1; text-align:center; padding:9px 4px 8px; font-size:12px; color:var(--ink-soft); cursor:pointer; font-weight:600;}
+  .tabbtn.active{color:var(--green);}
+  .tabbtn .ic{font-size:19px; display:block;}
+
+  .overlay{position:fixed; inset:0; background:rgba(43,38,32,.45); display:none; align-items:flex-end; justify-content:center; z-index:50;}
+  .overlay.show{display:flex;}
+  .sheet{background:var(--bg); width:100%; max-width:520px; border-radius:20px 20px 0 0; max-height:88vh; overflow-y:auto; padding:18px 18px 26px;}
+  .sheet-title{font-family:'Baloo Da 2',sans-serif; font-size:17px; color:var(--green); font-weight:700; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;}
+  .sheet-title .close{font-size:20px; color:var(--ink-soft); cursor:pointer; padding:2px 8px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row" id="headerRow"></div>
+  <div id="headerExtra"></div>
+</header>
+
+<main id="app"></main>
+
+<div class="tabbar">
+  <div class="tabbtn" id="tab-prices" onclick="switchTab('prices')"><span class="ic">💰</span>দাম</div>
+  <div class="tabbtn" id="tab-market" onclick="switchTab('market')"><span class="ic">🏪</span>দোকান</div>
+  <div class="tabbtn" id="tab-account" onclick="switchTab('account')"><span class="ic">👤</span>অ্যাকাউন্ট</div>
+</div>
+
+<!-- ================= location sheet (prices) ================= -->
+<div class="overlay" id="locationSheet">
+  <div class="sheet">
+    <div class="sheet-title">এলাকা বেছে নিন <span class="close" onclick="closeSheet('locationSheet')">✕</span></div>
+    <div class="field"><label>জেলা</label>
+      <div class="district-list" id="districtList"></div>
+    </div>
+    <div class="field"><label>থানা</label>
+      <div class="thana-list" id="thanaList"></div>
+    </div>
+    <button class="btn btn-primary" onclick="confirmLocation()">এই এলাকার দাম দেখুন</button>
+  </div>
+</div>
+
+<!-- ================= admin sheets (prices) ================= -->
+<div class="overlay" id="adminGate">
+  <div class="sheet">
+    <div class="sheet-title">অ্যাডমিন লগইন <span class="close" onclick="closeSheet('adminGate')">✕</span></div>
+    <div class="field"><label>ইমেইল</label><input id="adminEmail" type="email" placeholder="আপনার অ্যাডমিন ইমেইল"></div>
+    <div class="field"><label>পাসওয়ার্ড</label><input id="adminPass" type="password" placeholder="পাসওয়ার্ড"></div>
+    <button class="btn btn-primary" id="loginBtn" onclick="tryAdminLogin()">প্রবেশ করুন</button>
+    <div class="note" id="adminGateMsg"></div>
+  </div>
+</div>
+
+<div class="overlay" id="adminPanel">
+  <div class="sheet">
+    <div class="sheet-title">দাম এন্ট্রি — ঝিকরগাছা <span class="close" onclick="closeSheet('adminPanel')">✕</span></div>
+    <div style="display:flex; justify-content:flex-end; margin-top:-8px; margin-bottom:10px;">
+      <button class="btn-ghost" style="width:auto; padding:4px 0;" onclick="adminLogout()">লগআউট</button>
+    </div>
+    <div class="field"><label>ক্যাটাগরি</label>
+      <select id="f_category"></select>
+    </div>
+    <div class="field"><label>পণ্যের নাম</label><input id="f_name" placeholder="যেমন: দেশি পেঁয়াজ"></div>
+    <div class="grid-2">
+      <div class="field"><label>একক</label><input id="f_unit" placeholder="যেমন: কেজি"></div>
+      <div class="field"><label>বাজার</label>
+        <select id="f_market">
+          <option>ঝিকরগাছা বাজার</option>
+          <option>বাঁকড়া বাজার</option>
+          <option>গদখালী বাজার</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field"><label>পাইকারি দাম (৳)</label><input id="f_wholesale" type="number" inputmode="decimal"></div>
+      <div class="field"><label>খুচরা দাম (৳)</label><input id="f_retail" type="number" inputmode="decimal"></div>
+    </div>
+    <button class="btn btn-primary" id="saveBtn" onclick="addEntry()">যোগ করুন / আপডেট করুন</button>
+
+    <div class="admin-list" id="adminList"></div>
+    <div class="note">এখন দাম সরাসরি Firestore ডেটাবেজে সেভ হচ্ছে — আপনি যা যোগ করবেন তা সব ভিজিটর সাথে সাথে দেখতে পাবে (রিলোড ছাড়াই)।</div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, setDoc, updateDoc, deleteDoc, doc, getDoc,
+  onSnapshot, query, where, getDocs, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* ================= Firebase init (একবারই — পুরো অ্যাপের জন্য শেয়ার হবে) ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyC8Pn_ADy5AS8LBg6yRQmW4K9a9feexRDI",
+  authDomain: "dailybazar-e37d0.firebaseapp.com",
+  projectId: "dailybazar-e37d0",
+  storageBucket: "dailybazar-e37d0.firebasestorage.app",
+  messagingSenderId: "213240979076",
+  appId: "1:213240979076:web:aff7634844bbaf021bacd1"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+const auth = getAuth(fbApp);
+const pricesCol = collection(db, "prices");
+
+/* ================= global tab state ================= */
+let activeTab = 'prices'; // 'prices' | 'market' | 'account'
+window.switchTab = function(tab, opts){
+  activeTab = tab;
+  if(opts && opts.marketView){ marketState.view = opts.marketView; }
+  masterRender();
+};
+function masterRender(){
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+activeTab).classList.add('active');
+  renderHeader();
+  const app = document.getElementById('app');
+  if(activeTab === 'prices'){ app.innerHTML = `<div class="chip-row" id="chipRow"></div><div id="mainArea"></div>`; renderChips(); renderBoard(); }
+  else if(activeTab === 'market'){ renderMarketTab(app); }
+  else if(activeTab === 'account'){ renderAccountTab(app); }
+}
+function renderHeader(){
+  const row = document.getElementById('headerRow');
+  const extra = document.getElementById('headerExtra');
+  if(activeTab === 'prices'){
+    row.innerHTML = `
+      <div>
+        <div class="wordmark"><span class="main">ডেইলি বাজার</span><span class="dot">.com</span></div>
+        <div class="tagline">আজকের বাজার দর, আপনার এলাকার</div>
+      </div>
+      <div class="loc-pill" onclick="openSheet('locationSheet')">📍 <b id="locLabel">${locLabelText()}</b> ▾</div>`;
+    extra.innerHTML = `<div class="updated-strip"><span class="tick"></span><span>লাইভ ডেটাবেজ থেকে দেখানো হচ্ছে</span><span class="live-badge">LIVE</span></div>`;
+  } else if(activeTab === 'market'){
+    row.innerHTML = `<div class="wordmark"><span class="main">দোকান</span><span class="dot"> ও অর্ডার</span></div>
+      ${marketState.user ? `<button class="header-btn" onclick="doLogout()">লগআউট</button>` : ''}`;
+    extra.innerHTML = '';
+  } else {
+    row.innerHTML = `<div class="wordmark"><span class="main">অ্যাকাউন্ট</span></div>`;
+    extra.innerHTML = '';
+  }
+}
+
+/* ================================================================
+   ================= PRICES TAB (দাম) ================================
+   ================================================================ */
+const DISTRICTS = [
+  {id:'jashore', name:'যশোর', active:true},
+  {id:'dhaka', name:'ঢাকা', active:false},
+  {id:'khulna', name:'খুলনা', active:false},
+  {id:'rajshahi', name:'রাজশাহী', active:false},
+];
+const THANAS = {
+  jashore: [
+    {id:'jhikargacha', name:'ঝিকরগাছা', active:true},
+    {id:'jashore-sadar', name:'যশোর সদর', active:false},
+    {id:'chougachha', name:'চৌগাছা', active:false},
+    {id:'monirampur', name:'মনিরামপুর', active:false},
+  ]
+};
+const CATEGORIES = [
+  {id:'rice-lentil', name:'চাল ও ডাল'},
+  {id:'veg', name:'সবজি'},
+  {id:'fish', name:'মাছ'},
+  {id:'meat-egg', name:'মাংস ও ডিম'},
+  {id:'daily', name:'নিত্যপ্রয়োজনীয়'},
+];
+const SEED_PRICES = [
+  {cat:'rice-lentil', name:'মিনিকেট চাল', unit:'কেজি', wholesale:62, retail:68, trend:'same', market:'ঝিকরগাছা বাজার'},
+  {cat:'rice-lentil', name:'মসুর ডাল (দেশি)', unit:'কেজি', wholesale:118, retail:130, trend:'up', market:'ঝিকরগাছা বাজার'},
+  {cat:'veg', name:'দেশি পেঁয়াজ', unit:'কেজি', wholesale:52, retail:60, trend:'up', market:'বাঁকড়া বাজার'},
+  {cat:'veg', name:'আলু', unit:'কেজি', wholesale:22, retail:28, trend:'down', market:'ঝিকরগাছা বাজার'},
+  {cat:'fish', name:'রুই মাছ', unit:'কেজি', wholesale:240, retail:280, trend:'same', market:'ঝিকরগাছা বাজার'},
+  {cat:'meat-egg', name:'ব্রয়লার মুরগি', unit:'কেজি', wholesale:180, retail:200, trend:'up', market:'বাঁকড়া বাজার'},
+  {cat:'daily', name:'সয়াবিন তেল', unit:'লিটার', wholesale:175, retail:188, trend:'same', market:'ঝিকরগাছা বাজার'},
+];
+
+let PRICES = [];
+let pricesState = {district:'jashore', thana:'jhikargacha', category:'all'};
+let unsubscribePrices = null;
+
+async function seedIfEmpty(){
+  const q = query(pricesCol, where('district','==','jashore'), where('thana','==','jhikargacha'));
+  const snap = await getDocs(q);
+  if(snap.empty){
+    for(const item of SEED_PRICES){
+      await addDoc(pricesCol, {...item, district:'jashore', thana:'jhikargacha', updatedAt: Date.now()});
+    }
+  }
+}
+function subscribeToPrices(){
+  if(unsubscribePrices) unsubscribePrices();
+  if(!(pricesState.district === 'jashore' && pricesState.thana === 'jhikargacha')){
+    PRICES = [];
+    if(activeTab==='prices') renderBoard();
+    return;
+  }
+  const q = query(pricesCol, where('district','==',pricesState.district), where('thana','==',pricesState.thana));
+  unsubscribePrices = onSnapshot(q, (snap) => {
+    PRICES = [];
+    snap.forEach(d => PRICES.push({id:d.id, ...d.data()}));
+    if(activeTab==='prices') renderBoard();
+    if(document.getElementById('adminPanel') && document.getElementById('adminPanel').classList.contains('show')) renderAdminList();
+  }, (err) => {
+    console.error(err);
+    const m = document.getElementById('mainArea');
+    if(m) m.innerHTML = `<div class="empty-state"><div class="display">ডেটাবেজ থেকে দাম আনতে সমস্যা হচ্ছে</div>ইন্টারনেট সংযোগ ও Firebase সেটিংস চেক করুন।</div>`;
+  });
+}
+function locLabelText(){
+  const d = DISTRICTS.find(x=>x.id===pricesState.district);
+  const t = (THANAS[pricesState.district]||[]).find(x=>x.id===pricesState.thana);
+  return `${d?d.name:''}${t?', '+t.name:''}`;
+}
+function renderChips(){
+  const row = document.getElementById('chipRow');
+  if(!row) return;
+  const all = [{id:'all', name:'সব'}, ...CATEGORIES];
+  row.innerHTML = all.map(c => `<div class="chip ${pricesState.category===c.id?'active':''}" onclick="setCategory('${c.id}')">${c.name}</div>`).join('');
+}
+window.setCategory = function(id){ pricesState.category = id; renderChips(); renderBoard(); };
+function trendLabel(t){
+  if(t==='up') return {icon:'▲', cls:'up', text:'বাড়তি'};
+  if(t==='down') return {icon:'▼', cls:'down', text:'কমতি'};
+  return {icon:'▬', cls:'same', text:'অপরিবর্তিত'};
+}
+function renderBoard(){
+  const main = document.getElementById('mainArea');
+  if(!main) return;
+  if(pricesState.district !== 'jashore' || pricesState.thana !== 'jhikargacha'){
+    main.innerHTML = `<div class="empty-state"><div class="display">এই এলাকার দাম এখনও যুক্ত করা হয়নি</div>শীঘ্রই আরও থানা যোগ করা হবে। আপাতত ঝিকরগাছার দাম দেখুন।</div>`;
+    return;
+  }
+  const items = PRICES.filter(p => pricesState.category==='all' ? true : p.cat===pricesState.category);
+  const groups = pricesState.category==='all'
+    ? CATEGORIES.map(c => ({cat:c, items: items.filter(i=>i.cat===c.id)})).filter(g=>g.items.length)
+    : [{cat: CATEGORIES.find(c=>c.id===pricesState.category), items}];
+
+  main.innerHTML = (groups.map(g => `
+    <div class="board-title">${g.cat.name}</div>
+    ${g.items.map(renderCard).join('')}
+  `).join('') || `<div class="empty-state"><div class="display">কোনো দাম পাওয়া যায়নি</div>অ্যাডমিন প্যানেল থেকে দাম যোগ করুন।</div>`)
+    + `<div class="admin-link"><span onclick="openSheet('adminGate')">🔒 অ্যাডমিন প্যানেল — দাম আপডেট করুন</span></div>`;
+}
+function renderCard(item){
+  const t = trendLabel(item.trend);
+  return `
+    <div class="price-card">
+      <div class="price-row">
+        <div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-unit">প্রতি ${item.unit}</div>
+        </div>
+        <div class="price-block">
+          <div class="retail-price">৳${item.retail}</div>
+          <div class="wholesale-price">পাইকারি ৳${item.wholesale}</div>
+          <div class="trend ${t.cls}">${t.icon} ${t.text}</div>
+        </div>
+      </div>
+      <div class="market-tag">📍 ${item.market}</div>
+    </div>`;
+}
+
+/* ---------- location sheet ---------- */
+function renderLocationSheet(){
+  document.getElementById('districtList').innerHTML = DISTRICTS.map(d => `
+    <div class="opt-row ${d.id===pricesState.district?'selected':''} ${d.active?'':'disabled'}"
+         onclick="${d.active ? `pickDistrict('${d.id}')` : ''}">
+      ${d.name} ${d.active?'':'<span class="soon-tag">শীঘ্রই আসছে</span>'}
+    </div>`).join('');
+  renderThanaList();
+}
+window.pickDistrict = function(id){ pricesState.district = id; renderLocationSheet(); };
+function renderThanaList(){
+  const list = THANAS[pricesState.district] || [];
+  document.getElementById('thanaList').innerHTML = list.map(t => `
+    <div class="opt-row ${t.id===pricesState.thana?'selected':''} ${t.active?'':'disabled'}"
+         onclick="${t.active ? `pickThana('${t.id}')` : ''}">
+      ${t.name} ${t.active?'':'<span class="soon-tag">শীঘ্রই আসছে</span>'}
+    </div>`).join('');
+}
+window.pickThana = function(id){ pricesState.thana = id; renderThanaList(); };
+window.confirmLocation = function(){
+  closeSheet('locationSheet');
+  renderHeader();
+  subscribeToPrices();
+};
+
+/* ---------- admin (Firebase Authentication) — সাইট মালিকের ব্যক্তিগত দাম-আপডেট প্যানেল ---------- */
+window.tryAdminLogin = async function(){
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass = document.getElementById('adminPass').value;
+  const msg = document.getElementById('adminGateMsg');
+  const loginBtn = document.getElementById('loginBtn');
+  if(!email || !pass){
+    msg.textContent = 'ইমেইল ও পাসওয়ার্ড দিন।';
+    msg.className = 'note warn';
+    return;
+  }
+  loginBtn.disabled = true; loginBtn.textContent = 'যাচাই হচ্ছে...';
+  msg.textContent = ''; msg.className = 'note';
+  try{
+    await signInWithEmailAndPassword(auth, email, pass);
+    document.getElementById('adminPass').value = '';
+    closeSheet('adminGate');
+    populateCategorySelect();
+    renderAdminList();
+    openSheet('adminPanel');
+  } catch(err){
+    console.error(err);
+    msg.textContent = 'ইমেইল বা পাসওয়ার্ড ভুল হয়েছে।';
+    msg.className = 'note warn';
+  } finally {
+    loginBtn.disabled = false; loginBtn.textContent = 'প্রবেশ করুন';
+  }
+};
+window.adminLogout = async function(){
+  await signOut(auth);
+  closeSheet('adminPanel');
+};
+function populateCategorySelect(){
+  document.getElementById('f_category').innerHTML = CATEGORIES.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+}
+window.addEntry = async function(){
+  const name = document.getElementById('f_name').value.trim();
+  const unit = document.getElementById('f_unit').value.trim();
+  const wholesale = parseFloat(document.getElementById('f_wholesale').value);
+  const retail = parseFloat(document.getElementById('f_retail').value);
+  const market = document.getElementById('f_market').value;
+  const cat = document.getElementById('f_category').value;
+  if(!name || !unit || isNaN(wholesale) || isNaN(retail)){
+    alert('সব ঘর পূরণ করুন।');
+    return;
+  }
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.disabled = true; saveBtn.textContent = 'সেভ হচ্ছে...';
+  try{
+    const existing = PRICES.find(p => p.name===name && p.market===market);
+    const data = {
+      cat, name, unit, wholesale, retail, market,
+      district: pricesState.district, thana: pricesState.thana,
+      trend: existing ? (retail > existing.retail ? 'up' : retail < existing.retail ? 'down' : 'same') : 'same',
+      updatedAt: Date.now()
+    };
+    if(existing){ await setDoc(doc(db,'prices',existing.id), data); }
+    else { await addDoc(pricesCol, data); }
+    ['f_name','f_unit','f_wholesale','f_retail'].forEach(id => document.getElementById(id).value='');
+  } catch(err){
+    console.error(err);
+    alert('সেভ করতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+  } finally {
+    saveBtn.disabled = false; saveBtn.textContent = 'যোগ করুন / আপডেট করুন';
+  }
+};
+function renderAdminList(){
+  const el = document.getElementById('adminList');
+  if(!el) return;
+  el.innerHTML = PRICES.map(p => `
+    <div class="admin-row">
+      <span>${p.name} — ৳${p.retail} <span style="color:var(--ink-soft)">(${p.market})</span></span>
+      <span class="del" onclick="deleteEntry('${p.id}')">মুছুন</span>
+    </div>`).join('');
+}
+window.deleteEntry = async function(id){
+  try{ await deleteDoc(doc(db,'prices',id)); }
+  catch(err){ console.error(err); alert('মুছতে সমস্যা হয়েছে।'); }
+};
+
+/* ---------- sheet helpers (শেয়ার্ড) ---------- */
+window.openSheet = function(id){
+  if(id==='locationSheet') renderLocationSheet();
+  document.getElementById(id).classList.add('show');
+};
+window.closeSheet = function(id){ document.getElementById(id).classList.remove('show'); };
+
+/* ================================================================
+   ================= MARKET + ACCOUNT (দোকান ও অ্যাকাউন্ট) =========
+   ================================================================ */
+let marketState = {
+  view: 'buyerHome',     // buyerHome, shopDetail, buyerChats, chatView, sellerDashboard, sellerShopForm, sellerProductForm, sellerChats
+  authRole: null,        // 'buyer' | 'seller'
+  authMode: 'login',     // 'login' | 'signup'
+  user: null,
+  role: null,
+  userName: '',
+  userEmail: '',
+  shops: [],
+  currentShop: null,
+  currentProducts: [],
+  myShop: null,
+  myProducts: [],
+  chats: [],
+  currentChatId: null,
+  currentChatPeerName: 'আলাপ',
+  editingProduct: null,
+  msgUnsub: null,
+};
+
+function compressImage(file, maxWidth = 700, quality = 0.72){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if(w > maxWidth){ h = Math.round(h * (maxWidth / w)); w = maxWidth; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function chatIdFor(buyerId, sellerId){ return `${buyerId}_${sellerId}`; }
+function esc(s){ return (s||'').toString().replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+
+/* ---------- market tab dispatcher ---------- */
+function renderMarketTab(app){
+  if(!marketState.user || !marketState.role){
+    app.innerHTML = `<div class="empty-state">
+      <div class="display">প্রথমে লগইন করুন</div>
+      দোকান ব্রাউজ করতে বা আপনার নিজের দোকান চালাতে ক্রেতা বা বিক্রেতা হিসেবে লগইন করুন।
+      <button class="btn btn-primary" onclick="switchTab('account')">লগইন করুন</button>
+    </div>`;
+    return;
+  }
+  let html = '';
+  if(marketState.role === 'buyer'){
+    html += `<div class="segrow">
+      <div class="segbtn ${['buyerHome','shopDetail'].includes(marketState.view)?'active':''}" onclick="goBuyerHome()">🏪 দোকান</div>
+      <div class="segbtn ${['buyerChats','chatView'].includes(marketState.view)?'active':''}" onclick="goBuyerChats()">💬 বার্তা</div>
+    </div>`;
+  } else {
+    html += `<div class="segrow">
+      <div class="segbtn ${['sellerDashboard','sellerShopForm','sellerProductForm'].includes(marketState.view)?'active':''}" onclick="goSellerDashboard()">🏪 আমার দোকান</div>
+      <div class="segbtn ${['sellerChats','chatView'].includes(marketState.view)?'active':''}" onclick="goSellerChats()">💬 বার্তা</div>
+    </div>`;
+  }
+  app.innerHTML = html + `<div id="marketInner"></div>`;
+  const inner = document.getElementById('marketInner');
+  if(marketState.view === 'buyerHome') return renderBuyerHome(inner);
+  if(marketState.view === 'shopDetail') return renderShopDetail(inner);
+  if(marketState.view === 'buyerChats') return renderChatList(inner, 'buyer');
+  if(marketState.view === 'sellerChats') return renderChatList(inner, 'seller');
+  if(marketState.view === 'chatView') return renderChatView(inner);
+  if(marketState.view === 'sellerDashboard') return renderSellerDashboard(inner);
+  if(marketState.view === 'sellerShopForm') return renderSellerShopForm(inner);
+  if(marketState.view === 'sellerProductForm') return renderSellerProductForm(inner);
+  return renderBuyerHome(inner);
+}
+
+/* ---------- account tab (লগইন/প্রোফাইল) ---------- */
+function renderAccountTab(app){
+  if(marketState.user && marketState.role){
+    const roleLabel = marketState.role === 'buyer' ? 'ক্রেতা' : 'বিক্রেতা';
+    app.innerHTML = `
+      <div class="card">
+        <div class="profile-row">
+          <div class="profile-avatar">${marketState.role==='buyer'?'🛍️':'🏪'}</div>
+          <div>
+            <div class="h1" style="margin:0;">${esc(marketState.userName || 'ব্যবহারকারী')}</div>
+            <div class="sub" style="margin:0;">${esc(marketState.userEmail||'')}</div>
+            <span class="role-badge">${roleLabel}</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="switchTab('market')">দোকান ট্যাবে যান</button>
+      <button class="btn btn-outline" onclick="doLogout()">লগআউট</button>`;
+    return;
+  }
+  if(!marketState.authRole){
+    app.innerHTML = `
+      <div class="card center-card">
+        <div class="h1">লগইন করুন</div>
+        <div class="sub">ক্রেতা হিসেবে দোকান দেখুন, অথবা বিক্রেতা হিসেবে আপনার দোকান খুলুন</div>
+        <div class="role-choice">
+          <div class="role-btn" onclick="pickAuthRole('buyer')"><span class="emoji">🛍️</span>আমি ক্রেতা</div>
+          <div class="role-btn" onclick="pickAuthRole('seller')"><span class="emoji">🏪</span>আমি বিক্রেতা</div>
+        </div>
+      </div>`;
+    return;
+  }
+  const roleLabel = marketState.authRole === 'buyer' ? 'ক্রেতা' : 'বিক্রেতা';
+  app.innerHTML = `
+    <div class="backline" onclick="backToRolePick()">← ফিরে যান</div>
+    <div class="card">
+      <div class="h1">${roleLabel} লগইন</div>
+      <div class="tabs">
+        <div class="tab ${marketState.authMode==='login'?'active':''}" onclick="setAuthMode('login')">লগইন</div>
+        <div class="tab ${marketState.authMode==='signup'?'active':''}" onclick="setAuthMode('signup')">নতুন অ্যাকাউন্ট</div>
+      </div>
+      ${marketState.authMode==='signup' ? `<div class="field"><label>${marketState.authRole==='seller'?'দোকানের নাম':'আপনার নাম'}</label><input id="authName" placeholder="${marketState.authRole==='seller'?'যেমন: রহিম স্টোর':'যেমন: করিম'}"></div>` : ''}
+      <div class="field"><label>ইমেইল</label><input id="authEmail" type="email" placeholder="you@example.com"></div>
+      <div class="field"><label>পাসওয়ার্ড</label><input id="authPass" type="password" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+      <div id="authMsg"></div>
+      <button class="btn btn-primary" id="authBtn" onclick="doAuth()">${marketState.authMode==='login'?'প্রবেশ করুন':'অ্যাকাউন্ট তৈরি করুন'}</button>
+    </div>`;
+}
+window.pickAuthRole = function(role){ marketState.authRole = role; marketState.authMode = 'login'; renderAccountTab(document.getElementById('app')); };
+window.backToRolePick = function(){ marketState.authRole = null; renderAccountTab(document.getElementById('app')); };
+window.setAuthMode = function(m){ marketState.authMode = m; renderAccountTab(document.getElementById('app')); };
+
+window.doAuth = async function(){
+  const email = document.getElementById('authEmail').value.trim();
+  const pass = document.getElementById('authPass').value;
+  const nameEl = document.getElementById('authName');
+  const name = nameEl ? nameEl.value.trim() : '';
+  const msg = document.getElementById('authMsg');
+  const btn = document.getElementById('authBtn');
+  if(!email || !pass || (marketState.authMode==='signup' && !name)){
+    msg.innerHTML = `<div class="msg err">সব ঘর পূরণ করুন।</div>`; return;
+  }
+  btn.disabled = true; btn.textContent = 'অপেক্ষা করুন...';
+  try{
+    let cred;
+    if(marketState.authMode === 'signup'){
+      cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await setDoc(doc(db, 'users', cred.user.uid), { role: marketState.authRole, name, email, createdAt: Date.now() });
+      if(marketState.authRole === 'seller'){
+        await setDoc(doc(db, 'shops', cred.user.uid), {
+          ownerId: cred.user.uid, shopName: name, shopPhoto: '', ownerPhoto: '',
+          description: '', address: '', phone: '', createdAt: Date.now()
+        });
+      }
+    } else {
+      cred = await signInWithEmailAndPassword(auth, email, pass);
+    }
+    // বাকি কাজ onAuthStateChanged এ হবে
+  } catch(err){
+    console.error(err);
+    let text = 'সমস্যা হয়েছে, আবার চেষ্টা করুন।';
+    if(err.code === 'auth/email-already-in-use') text = 'এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট আছে, লগইন করুন।';
+    if(err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') text = 'ইমেইল বা পাসওয়ার্ড ভুল হয়েছে।';
+    if(err.code === 'auth/weak-password') text = 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।';
+    msg.innerHTML = `<div class="msg err">${text}</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = marketState.authMode==='login' ? 'প্রবেশ করুন' : 'অ্যাকাউন্ট তৈরি করুন';
+  }
+};
+window.doLogout = async function(){
+  if(marketState.msgUnsub) marketState.msgUnsub();
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    marketState.user = user;
+    const uDoc = await getDoc(doc(db, 'users', user.uid));
+    if(uDoc.exists()){
+      marketState.role = uDoc.data().role || null;
+      marketState.userName = uDoc.data().name || '';
+      marketState.userEmail = uDoc.data().email || user.email || '';
+    } else {
+      marketState.role = null;
+    }
+    if(marketState.role === 'buyer'){ marketState.view='buyerHome'; activeTab='market'; goBuyerHome(); }
+    else if(marketState.role === 'seller'){ marketState.view='sellerDashboard'; activeTab='market'; goSellerDashboard(); }
+    else { masterRender(); }
+  } else {
+    marketState.user = null; marketState.role = null; marketState.authRole = null;
+    marketState.userName=''; marketState.userEmail='';
+    masterRender();
+  }
+});
+
+/* ================= BUYER SIDE ================= */
+window.goBuyerHome = async function(){
+  marketState.view = 'buyerHome'; masterRender();
+  const inner = document.getElementById('marketInner');
+  if(inner) inner.innerHTML = `<div class="empty-state">দোকানের তালিকা আনা হচ্ছে...</div>`;
+  const snap = await getDocs(collection(db, 'shops'));
+  marketState.shops = [];
+  snap.forEach(d => marketState.shops.push({ id: d.id, ...d.data() }));
+  if(activeTab==='market' && marketState.view==='buyerHome') masterRender();
+};
+function renderBuyerHome(app){
+  if(marketState.shops.length === 0){
+    app.innerHTML = `<div class="empty-state"><div class="display">এখনো কোনো দোকান যুক্ত হয়নি</div>শীঘ্রই বিক্রেতারা দোকান খুলবেন।</div>`;
+    return;
+  }
+  app.innerHTML = `<div class="h1" style="margin-bottom:12px;">নিকটস্থ দোকান</div>` + marketState.shops.map(s => `
+    <div class="shop-card" onclick="openShop('${s.id}')">
+      <img class="shop-photo" src="${s.shopPhoto || ''}" onerror="this.style.visibility='hidden'">
+      <div class="shop-info">
+        <div class="name">${esc(s.shopName || 'নামহীন দোকান')}</div>
+        <div class="addr">📍 ${esc(s.address || 'ঠিকানা দেওয়া নেই')}</div>
+      </div>
+    </div>`).join('');
+}
+window.openShop = async function(shopId){
+  marketState.view = 'shopDetail'; masterRender();
+  const inner = document.getElementById('marketInner');
+  if(inner) inner.innerHTML = `<div class="empty-state">দোকানের তথ্য আনা হচ্ছে...</div>`;
+  const sDoc = await getDoc(doc(db, 'shops', shopId));
+  marketState.currentShop = { id: shopId, ...sDoc.data() };
+  const q = query(collection(db, 'products'), where('sellerId', '==', shopId));
+  const snap = await getDocs(q);
+  marketState.currentProducts = [];
+  snap.forEach(d => marketState.currentProducts.push({ id: d.id, ...d.data() }));
+  if(activeTab==='market' && marketState.view==='shopDetail') masterRender();
+};
+function renderShopDetail(app){
+  const s = marketState.currentShop;
+  app.innerHTML = `
+    <div class="backline" onclick="goBuyerHome()">← দোকানের তালিকায় ফিরুন</div>
+    <div class="card">
+      <div class="shop-header">
+        <img src="${s.shopPhoto || ''}" onerror="this.style.visibility='hidden'">
+        <div>
+          <div class="h1" style="margin:0;">${esc(s.shopName)}</div>
+          <div class="addr" style="color:var(--ink-soft); font-size:12.5px;">📍 ${esc(s.address || '')}</div>
+        </div>
+      </div>
+      ${s.description ? `<div class="sub" style="margin-bottom:0;">${esc(s.description)}</div>` : ''}
+    </div>
+    <div class="h1" style="font-size:16px; margin:16px 0 8px;">পণ্যসমূহ</div>
+    ${marketState.currentProducts.length === 0 ? `<div class="empty-state">এই দোকানে এখনো কোনো পণ্য যোগ করা হয়নি।</div>` :
+      marketState.currentProducts.map(p => `
+      <div class="product-card">
+        <img class="product-photo" src="${p.photo || ''}" onerror="this.style.visibility='hidden'">
+        <div class="product-info">
+          <div class="name">${esc(p.name)}</div>
+          <div class="price">৳${p.price} <span style="font-size:11px; color:var(--ink-soft); font-weight:400;">/ ${esc(p.unit||'')}</span></div>
+        </div>
+        <button class="order-btn" onclick="orderProduct('${p.id}')">অর্ডার / বুকিং</button>
+      </div>`).join('')}
+  `;
+}
+window.orderProduct = async function(productId){
+  const product = marketState.currentProducts.find(p => p.id === productId);
+  const seller = marketState.currentShop;
+  await openChatWith(seller.id, seller.shopName, `আমি "${product.name}" পণ্যটি নিয়ে আগ্রহী, দাম ৳${product.price}। এটা অর্ডার/বুকিং করতে চাই।`);
+};
+
+/* ---------- chats (shared logic) ---------- */
+async function openChatWith(peerId, peerName, prefillText){
+  const isBuyer = marketState.role === 'buyer';
+  const buyerId = isBuyer ? marketState.user.uid : peerId;
+  const sellerId = isBuyer ? peerId : marketState.user.uid;
+  const cid = chatIdFor(buyerId, sellerId);
+  const cRef = doc(db, 'chats', cid);
+  const existing = await getDoc(cRef);
+  if(!existing.exists()){
+    await setDoc(cRef, {
+      buyerId, sellerId, participants: [buyerId, sellerId],
+      lastMessage: '', lastMessageAt: Date.now(), createdAt: Date.now()
+    });
+  }
+  marketState.currentChatId = cid;
+  marketState.currentChatPeerName = peerName;
+  marketState.view = 'chatView'; masterRender();
+  openChatMessages(cid, prefillText || '');
+}
+window.openChat = function(chatId, peerName){
+  marketState.currentChatId = chatId;
+  marketState.currentChatPeerName = peerName;
+  marketState.view = 'chatView'; masterRender();
+  openChatMessages(chatId, '');
+};
+window.goBuyerChats = function(){ marketState.view = 'buyerChats'; masterRender(); loadChatList('buyer'); };
+window.goSellerChats = function(){ marketState.view = 'sellerChats'; masterRender(); loadChatList('seller'); };
+
+async function loadChatList(role){
+  const field = role === 'buyer' ? 'buyerId' : 'sellerId';
+  const q = query(collection(db, 'chats'), where(field, '==', marketState.user.uid));
+  const snap = await getDocs(q);
+  const chats = [];
+  for(const d of snap.docs){
+    const c = { id: d.id, ...d.data() };
+    const peerId = role === 'buyer' ? c.sellerId : c.buyerId;
+    let peerName = 'ব্যবহারকারী';
+    let peerPhoto = '';
+    if(role === 'buyer'){
+      const sDoc = await getDoc(doc(db, 'shops', peerId));
+      if(sDoc.exists()){ peerName = sDoc.data().shopName; peerPhoto = sDoc.data().shopPhoto || ''; }
+    } else {
+      const uDoc = await getDoc(doc(db, 'users', peerId));
+      if(uDoc.exists()){ peerName = uDoc.data().name; }
+    }
+    chats.push({ ...c, peerName, peerPhoto });
+  }
+  chats.sort((a,b) => (b.lastMessageAt||0) - (a.lastMessageAt||0));
+  marketState.chats = chats;
+  if(activeTab==='market' && (marketState.view === 'buyerChats' || marketState.view === 'sellerChats')){
+    const inner = document.getElementById('marketInner');
+    if(inner) renderChatList(inner, role);
+  }
+}
+function renderChatList(app, role){
+  if(!marketState.chats || marketState.chats.length === 0){
+    app.innerHTML = `<div class="empty-state"><div class="display">কোনো বার্তা নেই</div>এখনো কোনো আলাপ শুরু হয়নি।</div>`;
+    return;
+  }
+  app.innerHTML = marketState.chats.map(c => `
+    <div class="chat-row" onclick="openChat('${c.id}', '${esc(c.peerName).replace(/'/g,"")}')">
+      <img class="chat-avatar" src="${c.peerPhoto||''}" onerror="this.style.visibility='hidden'">
+      <div>
+        <div class="chat-name">${esc(c.peerName)}</div>
+        <div class="chat-last">${esc(c.lastMessage || 'এখনো কোনো বার্তা নেই')}</div>
+      </div>
+    </div>`).join('');
+}
+function openChatMessages(chatId, prefillText){
+  if(marketState.msgUnsub) marketState.msgUnsub();
+  const q = query(collection(db, 'chats', chatId, 'messages'), orderBy('createdAt', 'asc'));
+  marketState.msgUnsub = onSnapshot(q, (snap) => {
+    const msgs = [];
+    snap.forEach(d => msgs.push({ id: d.id, ...d.data() }));
+    renderMessages(msgs);
+  });
+  setTimeout(() => {
+    const input = document.getElementById('chatInput');
+    if(input && prefillText) input.value = prefillText;
+  }, 50);
+}
+function renderChatView(app){
+  app.innerHTML = `
+    <div class="backline" onclick="${marketState.role==='buyer'?'goBuyerChats()':'goSellerChats()'}">← ${esc(marketState.currentChatPeerName)}</div>
+    <div class="chat-view">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-row">
+        <input id="chatInput" placeholder="বার্তা লিখুন..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+        <button class="chat-send" onclick="sendChatMessage()">পাঠান</button>
+      </div>
+    </div>`;
+}
+function renderMessages(msgs){
+  const box = document.getElementById('chatMessages');
+  if(!box) return;
+  box.innerHTML = msgs.map(m => `
+    <div class="bubble ${m.senderId===marketState.user.uid?'mine':'theirs'}">${esc(m.text)}</div>`).join('');
+  box.scrollTop = box.scrollHeight;
+}
+window.sendChatMessage = async function(){
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  const cid = marketState.currentChatId;
+  try{
+    await addDoc(collection(db, 'chats', cid, 'messages'), {
+      senderId: marketState.user.uid, senderRole: marketState.role, text, createdAt: Date.now()
+    });
+    await updateDoc(doc(db, 'chats', cid), { lastMessage: text, lastMessageAt: Date.now() });
+  } catch(err){ console.error(err); alert('বার্তা পাঠাতে সমস্যা হয়েছে।'); }
+};
+
+/* ================= SELLER SIDE ================= */
+window.goSellerDashboard = async function(){
+  marketState.view = 'sellerDashboard'; masterRender();
+  const inner = document.getElementById('marketInner');
+  if(inner) inner.innerHTML = `<div class="empty-state">তথ্য আনা হচ্ছে...</div>`;
+  const sDoc = await getDoc(doc(db, 'shops', marketState.user.uid));
+  marketState.myShop = sDoc.exists() ? { id: marketState.user.uid, ...sDoc.data() } : { id: marketState.user.uid };
+  const q = query(collection(db, 'products'), where('sellerId', '==', marketState.user.uid));
+  const snap = await getDocs(q);
+  marketState.myProducts = [];
+  snap.forEach(d => marketState.myProducts.push({ id: d.id, ...d.data() }));
+  if(activeTab==='market' && marketState.view==='sellerDashboard') masterRender();
+};
+function renderSellerDashboard(app){
+  const s = marketState.myShop;
+  app.innerHTML = `
+    <div class="card">
+      <div class="shop-header">
+        <img src="${s.shopPhoto || ''}" onerror="this.style.visibility='hidden'">
+        <div>
+          <div class="h1" style="margin:0;">${esc(s.shopName || 'আপনার দোকান')}</div>
+          <div class="addr" style="color:var(--ink-soft); font-size:12.5px;">📍 ${esc(s.address || 'ঠিকানা যোগ করুন')}</div>
+        </div>
+      </div>
+      <button class="btn btn-outline" onclick="goSellerShopForm()">দোকানের প্রোফাইল সম্পাদনা করুন</button>
+    </div>
+    <div class="h1" style="font-size:16px; margin:16px 0 8px; display:flex; justify-content:space-between; align-items:center;">
+      পণ্যসমূহ <span style="font-size:13px; color:var(--green); cursor:pointer;" onclick="goSellerProductForm(null)">+ নতুন পণ্য</span>
+    </div>
+    ${marketState.myProducts.length === 0 ? `<div class="empty-state">এখনো কোনো পণ্য যোগ করেননি।</div>` :
+      marketState.myProducts.map(p => `
+      <div class="product-card">
+        <img class="product-photo" src="${p.photo || ''}" onerror="this.style.visibility='hidden'">
+        <div class="product-info">
+          <div class="name">${esc(p.name)}</div>
+          <div class="price">৳${p.price} <span style="font-size:11px; color:var(--ink-soft); font-weight:400;">/ ${esc(p.unit||'')}</span></div>
+        </div>
+        <div class="seller-row-actions">
+          <span class="edit-a" onclick="goSellerProductForm('${p.id}')">সম্পাদনা</span>
+          <span class="del-a" onclick="deleteProduct('${p.id}')">মুছুন</span>
+        </div>
+      </div>`).join('')}
+  `;
+}
+window.goSellerShopForm = function(){ marketState.view = 'sellerShopForm'; masterRender(); };
+function renderSellerShopForm(app){
+  const s = marketState.myShop;
+  app.innerHTML = `
+    <div class="backline" onclick="goSellerDashboard()">← ফিরে যান</div>
+    <div class="card">
+      <div class="h1">দোকানের প্রোফাইল</div>
+      <div class="field"><label>দোকানের ছবি</label>
+        <div class="photo-upload">
+          <img class="photo-preview" id="shopPhotoPreview" src="${s.shopPhoto||''}" onerror="this.style.visibility='hidden'">
+          <label class="file-label">ছবি বাছাই করুন<input type="file" accept="image/*" onchange="handlePhotoSelect(event,'shopPhotoPreview')"></label>
+        </div>
+      </div>
+      <div class="field"><label>আপনার (মালিকের) ছবি</label>
+        <div class="photo-upload">
+          <img class="photo-preview" id="ownerPhotoPreview" src="${s.ownerPhoto||''}" onerror="this.style.visibility='hidden'">
+          <label class="file-label">ছবি বাছাই করুন<input type="file" accept="image/*" onchange="handlePhotoSelect(event,'ownerPhotoPreview')"></label>
+        </div>
+      </div>
+      <div class="field"><label>দোকানের নাম</label><input id="shopName" value="${esc(s.shopName||'')}"></div>
+      <div class="field"><label>ঠিকানা</label><input id="shopAddress" value="${esc(s.address||'')}" placeholder="যেমন: ঝিকরগাছা বাজার"></div>
+      <div class="field"><label>ফোন নম্বর</label><input id="shopPhone" value="${esc(s.phone||'')}"></div>
+      <div class="field"><label>দোকান সম্পর্কে</label><textarea id="shopDesc">${esc(s.description||'')}</textarea></div>
+      <div id="shopSaveMsg"></div>
+      <button class="btn btn-primary" id="shopSaveBtn" onclick="saveShopProfile()">সেভ করুন</button>
+    </div>`;
+}
+window.handlePhotoSelect = async function(event, previewId){
+  const file = event.target.files[0];
+  if(!file) return;
+  const dataUrl = await compressImage(file);
+  document.getElementById(previewId).src = dataUrl;
+  document.getElementById(previewId).style.visibility = 'visible';
+  document.getElementById(previewId).dataset.value = dataUrl;
+};
+window.saveShopProfile = async function(){
+  const btn = document.getElementById('shopSaveBtn');
+  const msg = document.getElementById('shopSaveMsg');
+  btn.disabled = true; btn.textContent = 'সেভ হচ্ছে...';
+  try{
+    const shopPhotoEl = document.getElementById('shopPhotoPreview');
+    const ownerPhotoEl = document.getElementById('ownerPhotoPreview');
+    const data = {
+      ownerId: marketState.user.uid,
+      shopName: document.getElementById('shopName').value.trim() || 'নামহীন দোকান',
+      address: document.getElementById('shopAddress').value.trim(),
+      phone: document.getElementById('shopPhone').value.trim(),
+      description: document.getElementById('shopDesc').value.trim(),
+      shopPhoto: shopPhotoEl.dataset.value || marketState.myShop.shopPhoto || '',
+      ownerPhoto: ownerPhotoEl.dataset.value || marketState.myShop.ownerPhoto || '',
+      updatedAt: Date.now()
+    };
+    await setDoc(doc(db, 'shops', marketState.user.uid), data, { merge: true });
+    marketState.myShop = { id: marketState.user.uid, ...marketState.myShop, ...data };
+    msg.innerHTML = `<div class="msg ok">সেভ হয়েছে!</div>`;
+    setTimeout(() => goSellerDashboard(), 500);
+  } catch(err){
+    console.error(err);
+    msg.innerHTML = `<div class="msg err">সেভ করতে সমস্যা হয়েছে, আবার চেষ্টা করুন।</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = 'সেভ করুন';
+  }
+};
+window.goSellerProductForm = function(productId){
+  marketState.editingProduct = productId ? marketState.myProducts.find(p => p.id === productId) : null;
+  marketState.view = 'sellerProductForm'; masterRender();
+};
+function renderSellerProductForm(app){
+  const p = marketState.editingProduct;
+  app.innerHTML = `
+    <div class="backline" onclick="goSellerDashboard()">← ফিরে যান</div>
+    <div class="card">
+      <div class="h1">${p ? 'পণ্য সম্পাদনা' : 'নতুন পণ্য যোগ করুন'}</div>
+      <div class="field"><label>পণ্যের ছবি</label>
+        <div class="photo-upload">
+          <img class="photo-preview" id="productPhotoPreview" src="${p&&p.photo||''}" onerror="this.style.visibility='hidden'">
+          <label class="file-label">ছবি বাছাই করুন<input type="file" accept="image/*" onchange="handlePhotoSelect(event,'productPhotoPreview')"></label>
+        </div>
+      </div>
+      <div class="field"><label>পণ্যের নাম</label><input id="pName" value="${esc(p&&p.name||'')}" placeholder="যেমন: দেশি পেঁয়াজ"></div>
+      <div class="grid-2">
+        <div class="field"><label>দাম (৳)</label><input id="pPrice" type="number" value="${p&&p.price||''}"></div>
+        <div class="field"><label>একক</label><input id="pUnit" value="${esc(p&&p.unit||'')}" placeholder="যেমন: কেজি"></div>
+      </div>
+      <div id="pMsg"></div>
+      <button class="btn btn-primary" id="pSaveBtn" onclick="saveProduct('${p?p.id:''}')">${p?'আপডেট করুন':'যোগ করুন'}</button>
+    </div>`;
+}
+window.saveProduct = async function(productId){
+  const btn = document.getElementById('pSaveBtn');
+  const msg = document.getElementById('pMsg');
+  const name = document.getElementById('pName').value.trim();
+  const price = parseFloat(document.getElementById('pPrice').value);
+  const unit = document.getElementById('pUnit').value.trim();
+  if(!name || isNaN(price) || !unit){
+    msg.innerHTML = `<div class="msg err">সব ঘর পূরণ করুন।</div>`; return;
+  }
+  btn.disabled = true; btn.textContent = 'সেভ হচ্ছে...';
+  try{
+    const photoEl = document.getElementById('productPhotoPreview');
+    const data = {
+      sellerId: marketState.user.uid, name, price, unit,
+      photo: photoEl.dataset.value || (marketState.editingProduct ? marketState.editingProduct.photo : '') || '',
+      updatedAt: Date.now()
+    };
+    if(productId){
+      await updateDoc(doc(db, 'products', productId), data);
+    } else {
+      data.createdAt = Date.now();
+      await addDoc(collection(db, 'products'), data);
+    }
+    goSellerDashboard();
+  } catch(err){
+    console.error(err);
+    msg.innerHTML = `<div class="msg err">সেভ করতে সমস্যা হয়েছে, আবার চেষ্টা করুন।</div>`;
+    btn.disabled = false; btn.textContent = productId ? 'আপডেট করুন' : 'যোগ করুন';
+  }
+};
+window.deleteProduct = async function(id){
+  if(!confirm('এই পণ্যটি মুছে ফেলতে চান?')) return;
+  try{ await deleteDoc(doc(db, 'products', id)); goSellerDashboard(); }
+  catch(err){ console.error(err); alert('মুছতে সমস্যা হয়েছে।'); }
+};
+
+/* ================= init ================= */
+seedIfEmpty().then(subscribeToPrices);
+masterRender();
+</script>
+</body>
+</html>
