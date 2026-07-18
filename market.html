@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ডেইলি বাজার.com — দোকান ও অর্ডার</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F2E4;
+    --paper:#FFFDF8;
+    --ink:#2B2620;
+    --ink-soft:#5C5548;
+    --green:#1F4D3A;
+    --green-soft:#E4EEE7;
+    --mustard:#E8A33D;
+    --maroon:#8B2635;
+    --up:#B9433F;
+    --down:#2C7A4B;
+    --line:#DCD3BC;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Hind Siliguri',sans-serif; -webkit-font-smoothing:antialiased;}
+  .display{font-family:'Baloo Da 2',sans-serif;}
+
+  header{background:var(--green); color:#fff; padding:14px 16px; position:sticky; top:0; z-index:20; box-shadow:0 4px 14px rgba(31,77,58,.18);}
+  .header-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .wordmark{font-family:'Baloo Da 2',sans-serif; font-weight:800; font-size:19px;}
+  .wordmark .dot{color:var(--mustard);}
+  .header-btn{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35); color:#fff; border-radius:999px; padding:6px 12px; font-size:12.5px; font-weight:600; cursor:pointer;}
+
+  main{max-width:520px; margin:0 auto; padding:16px 16px 90px;}
+
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:14px; margin-bottom:12px;}
+  .center-card{text-align:center; padding:26px 18px;}
+  .h1{font-family:'Baloo Da 2',sans-serif; font-size:19px; color:var(--green); font-weight:700; margin:0 0 6px;}
+  .sub{font-size:13px; color:var(--ink-soft); margin-bottom:16px;}
+
+  .role-choice{display:flex; gap:10px; margin-top:14px;}
+  .role-btn{flex:1; padding:18px 10px; border-radius:12px; border:2px solid var(--line); background:var(--paper); cursor:pointer; text-align:center; font-weight:700; font-size:14.5px; color:var(--ink);}
+  .role-btn .emoji{font-size:26px; display:block; margin-bottom:6px;}
+  .role-btn.buyer:active, .role-btn.seller:active{border-color:var(--green); background:var(--green-soft);}
+
+  .field{margin-bottom:12px;}
+  .field label{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:5px; font-weight:600;}
+  select, input, textarea{width:100%; padding:11px 12px; border-radius:10px; border:1px solid var(--line); background:var(--paper); font-family:'Hind Siliguri',sans-serif; font-size:14.5px; color:var(--ink);}
+  textarea{resize:vertical; min-height:70px;}
+
+  .btn{width:100%; padding:13px; border-radius:10px; border:none; font-family:'Hind Siliguri',sans-serif; font-weight:700; font-size:15px; cursor:pointer; margin-top:6px;}
+  .btn-primary{background:var(--green); color:#fff;}
+  .btn-primary:disabled{opacity:.6;}
+  .btn-ghost{background:none; color:var(--ink-soft); font-weight:600; width:auto; padding:6px 0;}
+  .btn-outline{background:none; border:1px solid var(--green); color:var(--green);}
+
+  .tabs{display:flex; gap:8px; margin-bottom:16px;}
+  .tab{flex:1; text-align:center; padding:9px; border-radius:999px; background:var(--paper); border:1px solid var(--line); font-weight:700; font-size:13.5px; color:var(--ink-soft); cursor:pointer;}
+  .tab.active{background:var(--green); border-color:var(--green); color:#fff;}
+
+  .msg{font-size:12.5px; padding:9px 11px; border-radius:9px; margin-bottom:10px;}
+  .msg.err{background:#F8E7E6; color:var(--maroon);}
+  .msg.ok{background:var(--green-soft); color:var(--green);}
+
+  .shop-card{display:flex; gap:12px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:10px; margin-bottom:10px; cursor:pointer;}
+  .shop-photo{width:64px; height:64px; border-radius:10px; object-fit:cover; background:var(--green-soft); flex:0 0 auto;}
+  .shop-info .name{font-weight:700; font-size:15px;}
+  .shop-info .addr{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+
+  .shop-header{display:flex; gap:12px; align-items:center; margin-bottom:14px;}
+  .shop-header img{width:70px; height:70px; border-radius:12px; object-fit:cover; background:var(--green-soft);}
+
+  .product-card{display:flex; gap:10px; align-items:center; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:10px; margin-bottom:10px;}
+  .product-photo{width:56px; height:56px; border-radius:9px; object-fit:cover; background:var(--green-soft); flex:0 0 auto;}
+  .product-info{flex:1;}
+  .product-info .name{font-weight:600; font-size:14.5px;}
+  .product-info .price{font-family:'Baloo Da 2',sans-serif; color:var(--green); font-weight:700; font-size:15px;}
+  .order-btn{background:var(--mustard); color:#fff; border:none; border-radius:8px; padding:8px 12px; font-weight:700; font-size:12.5px; cursor:pointer; white-space:nowrap;}
+  .seller-row-actions{display:flex; gap:8px;}
+  .seller-row-actions span{font-size:12px; font-weight:700; cursor:pointer;}
+  .edit-a{color:var(--green);}
+  .del-a{color:var(--up);}
+
+  .chat-row{display:flex; gap:10px; align-items:center; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:12px; margin-bottom:10px; cursor:pointer;}
+  .chat-avatar{width:44px; height:44px; border-radius:50%; object-fit:cover; background:var(--green-soft); flex:0 0 auto;}
+  .chat-name{font-weight:700; font-size:14.5px;}
+  .chat-last{font-size:12.5px; color:var(--ink-soft); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:230px;}
+
+  .chat-view{display:flex; flex-direction:column; height:calc(100vh - 130px);}
+  .chat-messages{flex:1; overflow-y:auto; padding:6px 2px; display:flex; flex-direction:column; gap:8px;}
+  .bubble{max-width:78%; padding:9px 12px; border-radius:14px; font-size:14px; line-height:1.4;}
+  .bubble.mine{align-self:flex-end; background:var(--green); color:#fff; border-bottom-right-radius:4px;}
+  .bubble.theirs{align-self:flex-start; background:var(--paper); border:1px solid var(--line); border-bottom-left-radius:4px;}
+  .chat-input-row{display:flex; gap:8px; padding-top:10px;}
+  .chat-input-row input{flex:1;}
+  .chat-send{background:var(--green); color:#fff; border:none; border-radius:10px; padding:0 16px; font-weight:700; cursor:pointer;}
+
+  .photo-upload{display:flex; align-items:center; gap:12px; margin-bottom:12px;}
+  .photo-preview{width:64px; height:64px; border-radius:10px; object-fit:cover; background:var(--green-soft); border:1px solid var(--line);}
+  .photo-upload label.file-label{background:var(--green-soft); color:var(--green); padding:8px 12px; border-radius:8px; font-size:12.5px; font-weight:700; cursor:pointer;}
+  .photo-upload input[type=file]{display:none;}
+
+  .empty-state{text-align:center; padding:50px 20px; color:var(--ink-soft);}
+  .empty-state .display{color:var(--green); font-size:17px; margin-bottom:6px;}
+
+  .backline{display:flex; align-items:center; gap:8px; margin-bottom:12px; color:var(--green); font-weight:700; font-size:14px; cursor:pointer;}
+
+  footer{position:fixed; bottom:0; left:0; right:0; background:var(--paper); border-top:1px solid var(--line); display:flex; z-index:20;}
+  footer .fbtn{flex:1; text-align:center; padding:10px 4px; font-size:12px; color:var(--ink-soft); cursor:pointer; font-weight:600;}
+  footer .fbtn.active{color:var(--green);}
+  footer .fbtn .ic{font-size:18px; display:block;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div class="wordmark">ডেইলি বাজার<span class="dot">.com</span> — দোকান</div>
+    <button class="header-btn" id="headerBtn" style="display:none" onclick="doLogout()">লগআউট</button>
+  </div>
+</header>
+
+<main id="app"></main>
+<footer id="footer" style="display:none"></footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, setDoc, updateDoc, deleteDoc, doc, getDoc,
+  onSnapshot, query, where, getDocs, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* ---------- Firebase init ---------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyC8Pn_ADy5AS8LBg6yRQmW4K9a9feexRDI",
+  authDomain: "dailybazar-e37d0.firebaseapp.com",
+  projectId: "dailybazar-e37d0",
+  storageBucket: "dailybazar-e37d0.firebasestorage.app",
+  messagingSenderId: "213240979076",
+  appId: "1:213240979076:web:aff7634844bbaf021bacd1"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+/* ---------- state ---------- */
+let state = {
+  view: 'landing',       // landing, auth, buyerHome, shopDetail, buyerChats, chatView, sellerDashboard, sellerShopForm, sellerProductForm, sellerChats
+  authRole: null,        // 'buyer' | 'seller'
+  authMode: 'login',     // 'login' | 'signup'
+  user: null,
+  role: null,
+  shops: [],
+  currentShop: null,
+  currentProducts: [],
+  myShop: null,
+  myProducts: [],
+  chats: [],
+  currentChatId: null,
+  currentChatPeerName: 'আলাপ',
+  editingProduct: null,
+  msgUnsub: null,
+  chatListUnsub: null,
+};
+
+/* ---------- helpers ---------- */
+function compressImage(file, maxWidth = 700, quality = 0.72){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if(w > maxWidth){ h = Math.round(h * (maxWidth / w)); w = maxWidth; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function chatIdFor(buyerId, sellerId){ return `${buyerId}_${sellerId}`; }
+function esc(s){ return (s||'').toString().replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+
+/* ---------- footer nav ---------- */
+function renderFooter(){
+  const footer = document.getElementById('footer');
+  if(!state.role){ footer.style.display = 'none'; return; }
+  footer.style.display = 'flex';
+  if(state.role === 'buyer'){
+    footer.innerHTML = `
+      <div class="fbtn ${state.view==='buyerHome'?'active':''}" onclick="goBuyerHome()"><span class="ic">🏪</span>দোকান</div>
+      <div class="fbtn ${state.view==='buyerChats'||state.view==='chatView'?'active':''}" onclick="goBuyerChats()"><span class="ic">💬</span>বার্তা</div>`;
+  } else {
+    footer.innerHTML = `
+      <div class="fbtn ${state.view==='sellerDashboard'?'active':''}" onclick="goSellerDashboard()"><span class="ic">🏪</span>আমার দোকান</div>
+      <div class="fbtn ${state.view==='sellerChats'||state.view==='chatView'?'active':''}" onclick="goSellerChats()"><span class="ic">💬</span>বার্তা</div>`;
+  }
+}
+
+/* ---------- master render ---------- */
+function render(){
+  document.getElementById('headerBtn').style.display = state.user ? 'block' : 'none';
+  renderFooter();
+  const app = document.getElementById('app');
+  if(state.view === 'landing') return renderLanding(app);
+  if(state.view === 'auth') return renderAuth(app);
+  if(state.view === 'buyerHome') return renderBuyerHome(app);
+  if(state.view === 'shopDetail') return renderShopDetail(app);
+  if(state.view === 'buyerChats') return renderChatList(app, 'buyer');
+  if(state.view === 'sellerChats') return renderChatList(app, 'seller');
+  if(state.view === 'chatView') return renderChatView(app);
+  if(state.view === 'sellerDashboard') return renderSellerDashboard(app);
+  if(state.view === 'sellerShopForm') return renderSellerShopForm(app);
+  if(state.view === 'sellerProductForm') return renderSellerProductForm(app);
+}
+
+/* ---------- landing ---------- */
+function renderLanding(app){
+  app.innerHTML = `
+    <div class="card center-card">
+      <div class="h1">দোকান ও অর্ডার</div>
+      <div class="sub">ক্রেতা হিসেবে দোকান দেখুন, অথবা বিক্রেতা হিসেবে আপনার দোকান খুলুন</div>
+      <div class="role-choice">
+        <div class="role-btn buyer" onclick="pickRole('buyer')"><span class="emoji">🛍️</span>আমি ক্রেতা</div>
+        <div class="role-btn seller" onclick="pickRole('seller')"><span class="emoji">🏪</span>আমি বিক্রেতা</div>
+      </div>
+    </div>`;
+}
+window.pickRole = function(role){
+  state.authRole = role; state.authMode = 'login'; state.view = 'auth'; render();
+};
+
+/* ---------- auth ---------- */
+function renderAuth(app){
+  const roleLabel = state.authRole === 'buyer' ? 'ক্রেতা' : 'বিক্রেতা';
+  app.innerHTML = `
+    <div class="backline" onclick="backToLanding()">← ফিরে যান</div>
+    <div class="card">
+      <div class="h1">${roleLabel} লগইন</div>
+      <div class="tabs">
+        <div class="tab ${state.authMode==='login'?'active':''}" onclick="setAuthMode('login')">লগইন</div>
+        <div class="tab ${state.authMode==='signup'?'active':''}" onclick="setAuthMode('signup')">নতুন অ্যাকাউন্ট</div>
+      </div>
+      ${state.authMode==='signup' ? `<div class="field"><label>${state.authRole==='seller'?'দোকানের নাম':'আপনার নাম'}</label><input id="authName" placeholder="${state.authRole==='seller'?'যেমন: রহিম স্টোর':'যেমন: করিম'}"></div>` : ''}
+      <div class="field"><label>ইমেইল</label><input id="authEmail" type="email" placeholder="you@example.com"></div>
+      <div class="field"><label>পাসওয়ার্ড</label><input id="authPass" type="password" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+      <div id="authMsg"></div>
+      <button class="btn btn-primary" id="authBtn" onclick="doAuth()">${state.authMode==='login'?'প্রবেশ করুন':'অ্যাকাউন্ট তৈরি করুন'}</button>
+    </div>`;
+}
+window.setAuthMode = function(m){ state.authMode = m; render(); };
+window.backToLanding = function(){ state.view = 'landing'; render(); };
+
+window.doAuth = async function(){
+  const email = document.getElementById('authEmail').value.trim();
+  const pass = document.getElementById('authPass').value;
+  const nameEl = document.getElementById('authName');
+  const name = nameEl ? nameEl.value.trim() : '';
+  const msg = document.getElementById('authMsg');
+  const btn = document.getElementById('authBtn');
+  if(!email || !pass || (state.authMode==='signup' && !name)){
+    msg.innerHTML = `<div class="msg err">সব ঘর পূরণ করুন।</div>`; return;
+  }
+  btn.disabled = true; btn.textContent = 'অপেক্ষা করুন...';
+  try{
+    let cred;
+    if(state.authMode === 'signup'){
+      cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await setDoc(doc(db, 'users', cred.user.uid), { role: state.authRole, name, email, createdAt: Date.now() });
+      if(state.authRole === 'seller'){
+        await setDoc(doc(db, 'shops', cred.user.uid), {
+          ownerId: cred.user.uid, shopName: name, shopPhoto: '', ownerPhoto: '',
+          description: '', address: '', phone: '', createdAt: Date.now()
+        });
+      }
+    } else {
+      cred = await signInWithEmailAndPassword(auth, email, pass);
+    }
+    // onAuthStateChanged এ বাকি কাজ হবে
+  } catch(err){
+    console.error(err);
+    let text = 'সমস্যা হয়েছে, আবার চেষ্টা করুন।';
+    if(err.code === 'auth/email-already-in-use') text = 'এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট আছে, লগইন করুন।';
+    if(err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') text = 'ইমেইল বা পাসওয়ার্ড ভুল হয়েছে।';
+    if(err.code === 'auth/weak-password') text = 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।';
+    msg.innerHTML = `<div class="msg err">${text}</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = state.authMode==='login' ? 'প্রবেশ করুন' : 'অ্যাকাউন্ট তৈরি করুন';
+  }
+};
+
+window.doLogout = async function(){
+  if(state.msgUnsub) state.msgUnsub();
+  if(state.chatListUnsub) state.chatListUnsub();
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    state.user = user;
+    const uDoc = await getDoc(doc(db, 'users', user.uid));
+    state.role = uDoc.exists() ? uDoc.data().role : null;
+    if(state.role === 'buyer'){ goBuyerHome(); }
+    else if(state.role === 'seller'){ goSellerDashboard(); }
+    else { state.view = 'landing'; render(); }
+  } else {
+    state.user = null; state.role = null;
+    state.view = 'landing';
+    render();
+  }
+});
+
+/* ================= BUYER SIDE ================= */
+window.goBuyerHome = async function(){
+  state.view = 'buyerHome'; render();
+  const app = document.getElementById('app');
+  app.innerHTML = `<div class="empty-state">দোকানের তালিকা আনা হচ্ছে...</div>`;
+  const snap = await getDocs(collection(db, 'shops'));
+  state.shops = [];
+  snap.forEach(d => state.shops.push({ id: d.id, ...d.data() }));
+  render();
+};
+function renderBuyerHome(app){
+  if(state.shops.length === 0){
+    app.innerHTML = `<div class="empty-state"><div class="display">এখনো কোনো দোকান যুক্ত হয়নি</div>শীঘ্রই বিক্রেতারা দোকান খুলবেন।</div>`;
+    return;
+  }
+  app.innerHTML = `<div class="h1" style="margin-bottom:12px;">নিকটস্থ দোকান</div>` + state.shops.map(s => `
+    <div class="shop-card" onclick="openShop('${s.id}')">
+      <img class="shop-photo" src="${s.shopPhoto || ''}" onerror="this.style.visibility='hidden'">
+      <div class="shop-info">
+        <div class="name">${esc(s.shopName || 'নামহীন দোকান')}</div>
+        <div class="addr">📍 ${esc(s.address || 'ঠিকানা দেওয়া নেই')}</div>
+      </div>
+    </div>`).join('');
+}
+
+window.openShop = async function(shopId){
+  state.view = 'shopDetail'; render();
+  const app = document.getElementById('app');
+  app.innerHTML = `<div class="empty-state">দোকানের তথ্য আনা হচ্ছে...</div>`;
+  const sDoc = await getDoc(doc(db, 'shops', shopId));
+  state.currentShop = { id: shopId, ...sDoc.data() };
+  const q = query(collection(db, 'products'), where('sellerId', '==', shopId));
+  const snap = await getDocs(q);
+  state.currentProducts = [];
+  snap.forEach(d => state.currentProducts.push({ id: d.id, ...d.data() }));
+  render();
+};
+function renderShopDetail(app){
+  const s = state.currentShop;
+  app.innerHTML = `
+    <div class="backline" onclick="goBuyerHome()">← দোকানের তালিকায় ফিরুন</div>
+    <div class="card">
+      <div class="shop-header">
+        <img src="${s.shopPhoto || ''}" onerror="this.style.visibility='hidden'">
+        <div>
+          <div class="h1" style="margin:0;">${esc(s.shopName)}</div>
+          <div class="addr" style="color:var(--ink-soft); font-size:12.5px;">📍 ${esc(s.address || '')}</div>
+        </div>
+      </div>
+      ${s.description ? `<div class="sub" style="margin-bottom:0;">${esc(s.description)}</div>` : ''}
+    </div>
+    <div class="h1" style="font-size:16px; margin:16px 0 8px;">পণ্যসমূহ</div>
+    ${state.currentProducts.length === 0 ? `<div class="empty-state">এই দোকানে এখনো কোনো পণ্য যোগ করা হয়নি।</div>` :
+      state.currentProducts.map(p => `
+      <div class="product-card">
+        <img class="product-photo" src="${p.photo || ''}" onerror="this.style.visibility='hidden'">
+        <div class="product-info">
+          <div class="name">${esc(p.name)}</div>
+          <div class="price">৳${p.price} <span style="font-size:11px; color:var(--ink-soft); font-weight:400;">/ ${esc(p.unit||'')}</span></div>
+        </div>
+        <button class="order-btn" onclick="orderProduct('${p.id}')">অর্ডার / বুকিং</button>
+      </div>`).join('')}
+  `;
+}
+window.orderProduct = async function(productId){
+  const product = state.currentProducts.find(p => p.id === productId);
+  const seller = state.currentShop;
+  await openChatWith(seller.id, seller.shopName, `আমি "${product.name}" পণ্যটি নিয়ে আগ্রহী, দাম ৳${product.price}। এটা অর্ডার/বুকিং করতে চাই।`);
+};
+
+/* ---------- chats (shared logic) ---------- */
+async function openChatWith(peerId, peerName, prefillText){
+  const isBuyer = state.role === 'buyer';
+  const buyerId = isBuyer ? state.user.uid : peerId;
+  const sellerId = isBuyer ? peerId : state.user.uid;
+  const cid = chatIdFor(buyerId, sellerId);
+  const cRef = doc(db, 'chats', cid);
+  const existing = await getDoc(cRef);
+  if(!existing.exists()){
+    await setDoc(cRef, {
+      buyerId, sellerId, participants: [buyerId, sellerId],
+      lastMessage: '', lastMessageAt: Date.now(), createdAt: Date.now()
+    });
+  }
+  state.currentChatId = cid;
+  state.currentChatPeerName = peerName;
+  state.view = 'chatView'; render();
+  openChatMessages(cid, prefillText || '');
+}
+window.openChat = function(chatId, peerName){
+  state.currentChatId = chatId;
+  state.currentChatPeerName = peerName;
+  state.view = 'chatView'; render();
+  openChatMessages(chatId, '');
+};
+
+window.goBuyerChats = function(){ state.view = 'buyerChats'; render(); loadChatList('buyer'); };
+window.goSellerChats = function(){ state.view = 'sellerChats'; render(); loadChatList('seller'); };
+
+async function loadChatList(role){
+  const field = role === 'buyer' ? 'buyerId' : 'sellerId';
+  const q = query(collection(db, 'chats'), where(field, '==', state.user.uid));
+  const snap = await getDocs(q);
+  const chats = [];
+  for(const d of snap.docs){
+    const c = { id: d.id, ...d.data() };
+    const peerId = role === 'buyer' ? c.sellerId : c.buyerId;
+    let peerName = 'ব্যবহারকারী';
+    let peerPhoto = '';
+    if(role === 'buyer'){
+      const sDoc = await getDoc(doc(db, 'shops', peerId));
+      if(sDoc.exists()){ peerName = sDoc.data().shopName; peerPhoto = sDoc.data().shopPhoto || ''; }
+    } else {
+      const uDoc = await getDoc(doc(db, 'users', peerId));
+      if(uDoc.exists()){ peerName = uDoc.data().name; }
+    }
+    chats.push({ ...c, peerName, peerPhoto });
+  }
+  chats.sort((a,b) => (b.lastMessageAt||0) - (a.lastMessageAt||0));
+  state.chats = chats;
+  if(state.view === 'buyerChats' || state.view === 'sellerChats') renderChatList(document.getElementById('app'), role);
+}
+function renderChatList(app, role){
+  if(!state.chats || state.chats.length === 0){
+    app.innerHTML = `<div class="empty-state"><div class="display">কোনো বার্তা নেই</div>এখনো কোনো আলাপ শুরু হয়নি।</div>`;
+    return;
+  }
+  app.innerHTML = state.chats.map(c => `
+    <div class="chat-row" onclick="openChat('${c.id}', '${esc(c.peerName).replace(/'/g,"")}')">
+      <img class="chat-avatar" src="${c.peerPhoto||''}" onerror="this.style.visibility='hidden'">
+      <div>
+        <div class="chat-name">${esc(c.peerName)}</div>
+        <div class="chat-last">${esc(c.lastMessage || 'এখনো কোনো বার্তা নেই')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function openChatMessages(chatId, prefillText){
+  if(state.msgUnsub) state.msgUnsub();
+  const q = query(collection(db, 'chats', chatId, 'messages'), orderBy('createdAt', 'asc'));
+  state.msgUnsub = onSnapshot(q, (snap) => {
+    const msgs = [];
+    snap.forEach(d => msgs.push({ id: d.id, ...d.data() }));
+    renderMessages(msgs);
+  });
+  setTimeout(() => {
+    const input = document.getElementById('chatInput');
+    if(input && prefillText) input.value = prefillText;
+  }, 50);
+}
+function renderChatView(app){
+  app.innerHTML = `
+    <div class="backline" onclick="${state.role==='buyer'?'goBuyerChats()':'goSellerChats()'}">← ${esc(state.currentChatPeerName)}</div>
+    <div class="chat-view">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-row">
+        <input id="chatInput" placeholder="বার্তা লিখুন..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+        <button class="chat-send" onclick="sendChatMessage()">পাঠান</button>
+      </div>
+    </div>`;
+}
+function renderMessages(msgs){
+  const box = document.getElementById('chatMessages');
+  if(!box) return;
+  box.innerHTML = msgs.map(m => `
+    <div class="bubble ${m.senderId===state.user.uid?'mine':'theirs'}">${esc(m.text)}</div>`).join('');
+  box.scrollTop = box.scrollHeight;
+}
+window.sendChatMessage = async function(){
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  const cid = state.currentChatId;
+  try{
+    await addDoc(collection(db, 'chats', cid, 'messages'), {
+      senderId: state.user.uid, senderRole: state.role, text, createdAt: Date.now()
+    });
+    await updateDoc(doc(db, 'chats', cid), { lastMessage: text, lastMessageAt: Date.now() });
+  } catch(err){ console.error(err); alert('বার্তা পাঠাতে সমস্যা হয়েছে।'); }
+};
+
+/* ================= SELLER SIDE ================= */
+window.goSellerDashboard = async function(){
+  state.view = 'sellerDashboard'; render();
+  const app = document.getElementById('app');
+  app.innerHTML = `<div class="empty-state">তথ্য আনা হচ্ছে...</div>`;
+  const sDoc = await getDoc(doc(db, 'shops', state.user.uid));
+  state.myShop = sDoc.exists() ? { id: state.user.uid, ...sDoc.data() } : { id: state.user.uid };
+  const q = query(collection(db, 'products'), where('sellerId', '==', state.user.uid));
+  const snap = await getDocs(q);
+  state.myProducts = [];
+  snap.forEach(d => state.myProducts.push({ id: d.id, ...d.data() }));
+  render();
+};
+function renderSellerDashboard(app){
+  const s = state.myShop;
+  app.innerHTML = `
+    <div class="card">
+      <div class="shop-header">
+        <img src="${s.shopPhoto || ''}" onerror="this.style.visibility='hidden'">
+        <div>
+          <div class="h1" style="margin:0;">${esc(s.shopName || 'আপনার দোকান')}</div>
+          <div class="addr" style="color:var(--ink-soft); font-size:12.5px;">📍 ${esc(s.address || 'ঠিকানা যোগ করুন')}</div>
+        </div>
+      </div>
+      <button class="btn btn-outline" onclick="goSellerShopForm()">দোকানের প্রোফাইল সম্পাদনা করুন</button>
+    </div>
+    <div class="h1" style="font-size:16px; margin:16px 0 8px; display:flex; justify-content:space-between; align-items:center;">
+      পণ্যসমূহ <span style="font-size:13px; color:var(--green); cursor:pointer;" onclick="goSellerProductForm(null)">+ নতুন পণ্য</span>
+    </div>
+    ${state.myProducts.length === 0 ? `<div class="empty-state">এখনো কোনো পণ্য যোগ করেননি।</div>` :
+      state.myProducts.map(p => `
+      <div class="product-card">
+        <img class="product-photo" src="${p.photo || ''}" onerror="this.style.visibility='hidden'">
+        <div class="product-info">
+          <div class="name">${esc(p.name)}</div>
+          <div class="price">৳${p.price} <span style="font-size:11px; color:var(--ink-soft); font-weight:400;">/ ${esc(p.unit||'')}</span></div>
+        </div>
+        <div class="seller-row-actions">
+          <span class="edit-a" onclick="goSellerProductForm('${p.id}')">সম্পাদনা</span>
+          <span class="del-a" onclick="deleteProduct('${p.id}')">মুছুন</span>
+        </div>
+      </div>`).join('')}
+  `;
+}
+
+window.goSellerShopForm = function(){ state.view = 'sellerShopForm'; render(); };
+function renderSellerShopForm(app){
+  const s = state.myShop;
+  app.innerHTML = `
+    <div class="backline" onclick="goSellerDashboard()">← ফিরে যান</div>
+    <div class="card">
+      <div class="h1">দোকানের প্রোফাইল</div>
+      <div class="field"><label>দোকানের ছবি</label>
+        <div class="photo-upload">
+          <img class="photo-preview" id="shopPhotoPreview" src="${s.shopPhoto||''}" onerror="this.style.visibility='hidden'">
+          <label class="file-label">ছবি বাছাই করুন<input type="file" accept="image/*" onchange="handlePhotoSelect(event,'shopPhotoPreview')"></label>
+        </div>
+      </div>
+      <div class="field"><label>আপনার (মালিকের) ছবি</label>
+        <div class="photo-upload">
+          <img class="photo-preview" id="ownerPhotoPreview" src="${s.ownerPhoto||''}" onerror="this.style.visibility='hidden'">
+          <label class="file-label">ছবি বাছাই করুন<input type="file" accept="image/*" onchange="handlePhotoSelect(event,'ownerPhotoPreview')"></label>
+        </div>
+      </div>
+      <div class="field"><label>দোকানের নাম</label><input id="shopName" value="${esc(s.shopName||'')}"></div>
+      <div class="field"><label>ঠিকানা</label><input id="shopAddress" value="${esc(s.address||'')}" placeholder="যেমন: ঝিকরগাছা বাজার"></div>
+      <div class="field"><label>ফোন নম্বর</label><input id="shopPhone" value="${esc(s.phone||'')}"></div>
+      <div class="field"><label>দোকান সম্পর্কে</label><textarea id="shopDesc">${esc(s.description||'')}</textarea></div>
+      <div id="shopSaveMsg"></div>
+      <button class="btn btn-primary" id="shopSaveBtn" onclick="saveShopProfile()">সেভ করুন</button>
+    </div>`;
+}
+window.handlePhotoSelect = async function(event, previewId){
+  const file = event.target.files[0];
+  if(!file) return;
+  const dataUrl = await compressImage(file);
+  document.getElementById(previewId).src = dataUrl;
+  document.getElementById(previewId).style.visibility = 'visible';
+  document.getElementById(previewId).dataset.value = dataUrl;
+};
+window.saveShopProfile = async function(){
+  const btn = document.getElementById('shopSaveBtn');
+  const msg = document.getElementById('shopSaveMsg');
+  btn.disabled = true; btn.textContent = 'সেভ হচ্ছে...';
+  try{
+    const shopPhotoEl = document.getElementById('shopPhotoPreview');
+    const ownerPhotoEl = document.getElementById('ownerPhotoPreview');
+    const data = {
+      ownerId: state.user.uid,
+      shopName: document.getElementById('shopName').value.trim() || 'নামহীন দোকান',
+      address: document.getElementById('shopAddress').value.trim(),
+      phone: document.getElementById('shopPhone').value.trim(),
+      description: document.getElementById('shopDesc').value.trim(),
+      shopPhoto: shopPhotoEl.dataset.value || state.myShop.shopPhoto || '',
+      ownerPhoto: ownerPhotoEl.dataset.value || state.myShop.ownerPhoto || '',
+      updatedAt: Date.now()
+    };
+    await setDoc(doc(db, 'shops', state.user.uid), data, { merge: true });
+    state.myShop = { id: state.user.uid, ...state.myShop, ...data };
+    msg.innerHTML = `<div class="msg ok">সেভ হয়েছে!</div>`;
+    setTimeout(() => goSellerDashboard(), 500);
+  } catch(err){
+    console.error(err);
+    msg.innerHTML = `<div class="msg err">সেভ করতে সমস্যা হয়েছে, আবার চেষ্টা করুন।</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = 'সেভ করুন';
+  }
+};
+
+window.goSellerProductForm = function(productId){
+  state.editingProduct = productId ? state.myProducts.find(p => p.id === productId) : null;
+  state.view = 'sellerProductForm'; render();
+};
+function renderSellerProductForm(app){
+  const p = state.editingProduct;
+  app.innerHTML = `
+    <div class="backline" onclick="goSellerDashboard()">← ফিরে যান</div>
+    <div class="card">
+      <div class="h1">${p ? 'পণ্য সম্পাদনা' : 'নতুন পণ্য যোগ করুন'}</div>
+      <div class="field"><label>পণ্যের ছবি</label>
+        <div class="photo-upload">
+          <img class="photo-preview" id="productPhotoPreview" src="${p&&p.photo||''}" onerror="this.style.visibility='hidden'">
+          <label class="file-label">ছবি বাছাই করুন<input type="file" accept="image/*" onchange="handlePhotoSelect(event,'productPhotoPreview')"></label>
+        </div>
+      </div>
+      <div class="field"><label>পণ্যের নাম</label><input id="pName" value="${esc(p&&p.name||'')}" placeholder="যেমন: দেশি পেঁয়াজ"></div>
+      <div class="grid-2" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="field"><label>দাম (৳)</label><input id="pPrice" type="number" value="${p&&p.price||''}"></div>
+        <div class="field"><label>একক</label><input id="pUnit" value="${esc(p&&p.unit||'')}" placeholder="যেমন: কেজি"></div>
+      </div>
+      <div id="pMsg"></div>
+      <button class="btn btn-primary" id="pSaveBtn" onclick="saveProduct('${p?p.id:''}')">${p?'আপডেট করুন':'যোগ করুন'}</button>
+    </div>`;
+}
+window.saveProduct = async function(productId){
+  const btn = document.getElementById('pSaveBtn');
+  const msg = document.getElementById('pMsg');
+  const name = document.getElementById('pName').value.trim();
+  const price = parseFloat(document.getElementById('pPrice').value);
+  const unit = document.getElementById('pUnit').value.trim();
+  if(!name || isNaN(price) || !unit){
+    msg.innerHTML = `<div class="msg err">সব ঘর পূরণ করুন।</div>`; return;
+  }
+  btn.disabled = true; btn.textContent = 'সেভ হচ্ছে...';
+  try{
+    const photoEl = document.getElementById('productPhotoPreview');
+    const data = {
+      sellerId: state.user.uid, name, price, unit,
+      photo: photoEl.dataset.value || (state.editingProduct ? state.editingProduct.photo : '') || '',
+      updatedAt: Date.now()
+    };
+    if(productId){
+      await updateDoc(doc(db, 'products', productId), data);
+    } else {
+      data.createdAt = Date.now();
+      await addDoc(collection(db, 'products'), data);
+    }
+    goSellerDashboard();
+  } catch(err){
+    console.error(err);
+    msg.innerHTML = `<div class="msg err">সেভ করতে সমস্যা হয়েছে, আবার চেষ্টা করুন।</div>`;
+    btn.disabled = false; btn.textContent = productId ? 'আপডেট করুন' : 'যোগ করুন';
+  }
+};
+window.deleteProduct = async function(id){
+  if(!confirm('এই পণ্যটি মুছে ফেলতে চান?')) return;
+  try{ await deleteDoc(doc(db, 'products', id)); goSellerDashboard(); }
+  catch(err){ console.error(err); alert('মুছতে সমস্যা হয়েছে।'); }
+};
+
+/* ---------- init ---------- */
+render();
+</script>
+</body>
+</html>
